@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>
       Settings
     </ion-title>
@@ -12,8 +12,8 @@
       <ion-col>
         <ion-list>
           <form (ngSubmit)="saveForm()">
-              <ion-label>
-                Ethereum public address
+              <ion-label text-center>
+                <h5>Ethereum public address</h5>
               </ion-label>
               <ion-input [(ngModel)]="wallet" name="wallet" type="text"></ion-input>
       

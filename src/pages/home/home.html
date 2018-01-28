@@ -1,79 +1,55 @@
 <ion-header>
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Home</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-item *ngIf="!wallet">
-    <p >add a wallet address in the settings tab</p>
-  </ion-item>
-  <ion-item *ngIf="wallet">
-    <h1 text-center class="primary">
-      ${{totalBalance}}
-    </h1>
-  </ion-item>
+  <ion-list *ngIf="wallet">
 
-  <div class="container" *ngIf="wallet">
-    <ion-card>
-    
-      <ion-card-header>
-        <ion-row>
-          <ion-col text-left>
-            ETH
-          </ion-col>
-          <ion-col text-right>
-            ${{ethPrice.price}}
-            <small *ngIf="ethPrice.cap24hrChange > 0" style="color: green;">
-              {{ethPrice.cap24hrChange}}%
-            </small>
-            <small *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
-              {{ethPrice.cap24hrChange}}%
-            </small>
-          </ion-col>
-        </ion-row>
-      </ion-card-header>
-    
-      <ion-card-content>
-        <ion-row>
-          <ion-col text-right>
-            <small>{{wallet.ETH.balance}} ETH</small><br>
-            <small>${{ethPrice.price * wallet.ETH.balance}}</small>
-          </ion-col>
-        </ion-row>
-      </ion-card-content>
-    
-    </ion-card>
-
-    <ion-card *ngFor="let t of wallet.tokens">
-    
-      <ion-card-header>
-        <ion-row>
-          <ion-col text-left>
-            {{t.tokenInfo.symbol}}
-          </ion-col>
-          <ion-col text-right>
-            ${{t.tokenInfo.price.rate}} 
-            <small *ngIf="t.tokenInfo.price.diff > 0" style="color: green;">
-              {{t.tokenInfo.price.diff}}%
-            </small>
-            <small *ngIf="t.tokenInfo.price.diff < 0" style="color: red;">
-              {{t.tokenInfo.price.diff}}%
-            </small>
-          </ion-col>
-        </ion-row>
-      </ion-card-header>
-    
-      <ion-card-content>
-        <ion-row>
-          <ion-col text-right>
-            <small>{{t.balance * Math.pow(10, -t.tokenInfo.decimals)}} {{t.tokenInfo.symbol}}</small><br>
-            <small>${{t.tokenInfo.price.rate * (t.balance * Math.pow(10, -t.tokenInfo.decimals))}}</small>
-          </ion-col>
-        </ion-row>
-      </ion-card-content>
-    
-    </ion-card>
-  </div>
+    <ion-list-header text-center>
+      <h1>${{totalBalance}}</h1>
+    </ion-list-header>    
   
+    <ion-item *ngIf="ethPrice">
+
+      <ion-avatar item-start>
+        <img src="{{wallet.ETH.imgUrl}}">
+      </ion-avatar>
+
+      <h2>${{ethPrice.price * wallet.ETH.balance | number : '1.2-2'}}</h2>
+
+      <p>{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
+      
+      <ion-note item-end>
+      
+        <small *ngIf="ethPrice.cap24hrChange > 0" style="color: green;">
+          {{ethPrice.cap24hrChange}}%
+        </small>
+        <small *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
+          {{ethPrice.cap24hrChange}}%
+        </small>
+      </ion-note>
+    </ion-item>
+
+    <ion-item *ngFor="let t of wallet.tokens">
+      <ion-avatar item-start>
+        <img src="{{t.imgUrl}}"> 
+      </ion-avatar>
+      
+      <h2>${{t.tokenInfo.price.rate * (t.balance * Math.pow(10, -t.tokenInfo.decimals)) | number : '1.2-2'}}</h2>
+
+      <p>{{t.balance * Math.pow(10, -t.tokenInfo.decimals) | number : '0.2-2'}} {{t.tokenInfo.symbol}}</p>
+      
+      <ion-note item-end>
+        <small *ngIf="t.tokenInfo.price.diff > 0" style="color: green;">
+          {{t.tokenInfo.price.diff}}%
+        </small>
+        <small *ngIf="t.tokenInfo.price.diff < 0" style="color: red;">
+          {{t.tokenInfo.price.diff}}%
+        </small>
+      </ion-note>
+    
+    </ion-item>
+  </ion-list>
 </ion-content>
