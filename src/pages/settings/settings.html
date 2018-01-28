@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Settings
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <form (ngSubmit)="saveForm()">
+              <ion-label>
+                Ethereum public address
+              </ion-label>
+              <ion-input [(ngModel)]="wallet" name="wallet" type="text"></ion-input>
+      
+            <button ion-button type="submit" block>Save Changes</button>
+          </form>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
