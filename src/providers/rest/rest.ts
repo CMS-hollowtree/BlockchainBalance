@@ -17,7 +17,6 @@ export class RestProvider {
 
 
   constructor(public http: HttpClient) {
-    console.log('Hello RestProvider Provider');
     this.url = 'https://api.ethplorer.io/';
     this.coincapUrl ='http://coincap.io/page/ETH/';
     this.cyrptocompareUrl = 'https://min-api.cryptocompare.com/data/all/coinlist';

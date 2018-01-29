@@ -1,8 +1,17 @@
 page-home {
 	ion-note {
 	    font-size: 14px;
-	    align-self: flex-start;
-	    margin-top: 14px;
+	    //align-self: flex-start;
+	    position: relative;
+	}
+
+	.changed {
+		position: absolute;
+		left: 100%;
+		//top: 25%;
+		font-weight: bold;
+		margin-left: -25px;
+		font-size: 10px;
 	}
 
 }

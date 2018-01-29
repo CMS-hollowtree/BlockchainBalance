@@ -4,52 +4,48 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content no-padding>
   <ion-list *ngIf="wallet">
-
-    <ion-list-header text-center>
-      <h1>${{totalBalance}}</h1>
-    </ion-list-header>    
-  
+    <ion-card text-center color="primary">
+      <ion-card-header>
+        <h1>${{totalBalance | number : '1.2-2'}}</h1>
+      </ion-card-header>
+    </ion-card>      
     <ion-item *ngIf="ethPrice">
-
       <ion-avatar item-start>
         <img src="{{wallet.ETH.imgUrl}}">
       </ion-avatar>
-
-      <h2>${{ethPrice.price * wallet.ETH.balance | number : '1.2-2'}}</h2>
-
+      <h2>
+        <strong>${{ethPrice.price * wallet.ETH.balance | number : '1.2-2'}}</strong>  
+      </h2>
       <p>{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
-      
       <ion-note item-end>
-      
-        <small *ngIf="ethPrice.cap24hrChange > 0" style="color: green;">
+        <small class="changed" *ngIf="ethPrice.cap24hrChange > 0" style="color: green;">
           {{ethPrice.cap24hrChange}}%
         </small>
-        <small *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
+        <small class="changed" *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
           {{ethPrice.cap24hrChange}}%
-        </small>
+        </small><br>
+        1 ETH = ${{ethPrice.price}}
       </ion-note>
     </ion-item>
-
     <ion-item *ngFor="let t of wallet.tokens">
       <ion-avatar item-start>
         <img src="{{t.imgUrl}}"> 
       </ion-avatar>
-      
-      <h2>${{t.tokenInfo.price.rate * (t.balance * Math.pow(10, -t.tokenInfo.decimals)) | number : '1.2-2'}}</h2>
-
+      <h2>
+        <strong>${{t.tokenInfo.price.rate * (t.balance * Math.pow(10, -t.tokenInfo.decimals)) | number : '1.2-2'}}</strong>
+      </h2>
       <p>{{t.balance * Math.pow(10, -t.tokenInfo.decimals) | number : '0.2-2'}} {{t.tokenInfo.symbol}}</p>
-      
       <ion-note item-end>
-        <small *ngIf="t.tokenInfo.price.diff > 0" style="color: green;">
-          {{t.tokenInfo.price.diff}}%
+      <small class="changed" *ngIf="t.tokenInfo.price.diff > 0" style="color: green;">
+          {{t.tokenInfo.price.diff | number : '0.2-2'}}%
         </small>
-        <small *ngIf="t.tokenInfo.price.diff < 0" style="color: red;">
-          {{t.tokenInfo.price.diff}}%
-        </small>
+        <small class="changed" *ngIf="t.tokenInfo.price.diff < 0" style="color: red;">
+          {{t.tokenInfo.price.diff | number : '0.2-2'}}%
+        </small><br>
+        1 {{t.tokenInfo.symbol}} = ${{t.tokenInfo.price.rate | number : '0.2-2'}}
       </ion-note>
-    
     </ion-item>
   </ion-list>
 </ion-content>
