@@ -1,6 +1,6 @@
 {
   "name": "BlockchainBalance",
-  "app_id": "",
+  "app_id": "241777e0",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
