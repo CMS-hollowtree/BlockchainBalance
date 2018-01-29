@@ -74,12 +74,18 @@ export class HomePage {
     this.lineChart = new Chart(this.lineCanvas.nativeElement, {
             type: 'line',
             options: {
-    legend: {
-        display: false
-    },
+              legend: {
+                  display: false
+                },
+              scales:
+                {
+                    xAxes: [{
+                        display: false
+                    }]
+                }
+              },
             data: {
                 labels: coinTimes,
-
                 datasets: [
                     {
                         label: "Today",
