@@ -7,22 +7,27 @@
 </ion-header>
 
 <ion-content no-padding>
-  <ion-fab top right edge>
-    <button ion-fab mini color="secondary" (click)="scan()"><ion-icon name="qr-scanner"></ion-icon></button>
-  </ion-fab>
   <ion-grid>
     <ion-row>
       <ion-col>
         <ion-list>
+        <ion-list-header>
+          Public addresses
+        </ion-list-header>    
           <form (ngSubmit)="saveForm()">
-              <ion-label text-center>
-                <h5>Ethereum public address</h5> 
-              </ion-label>
-              <ion-item class="rounded">
-                <ion-input [(ngModel)]="wallet" name="wallet" type="text"></ion-input>
-              </ion-item>
-                
-            <button ion-button type="submit" block>Save Changes</button>
+              <ion-card>
+                  
+                <ion-card-header>
+                  Ethereum
+                  <button ion-fab mini color="light" (click)="scan()"><ion-icon name="qr-scanner"></ion-icon></button>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-input [(ngModel)]="wallet" name="wallet" type="text"></ion-input>
+                  <button ion-button type="submit" block>Save Changes</button>
+                </ion-card-content>
+              </ion-card>
+              
+            
           </form>
         </ion-list>
       </ion-col>

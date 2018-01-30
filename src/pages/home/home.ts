@@ -11,51 +11,48 @@ import { Chart } from 'chart.js';
 })
 export class HomePage {
 	wallet:any;
-	totalBalance: number;
+	btcWallet:any;
+	ltcWallet:any;
+	totalBalance:number;
 	ethPrice:any;
+	btcPrice:any;
+	ltcPrice:any;
 	Math:Math = Math;
 	address:string;
 	coinData:any;
-  btcPriceData:any;
-  btcPriceLast7Days: any = [];
+  	btcPriceData:any;
+  	btcPriceLast7Days:any = [];
 
-	@ViewChild('lineCanvas', {read: ElementRef}) lineCanvas: ElementRef;
+	@ViewChild('lineCanvasBTC', {read: ElementRef}) lineCanvasBTC: ElementRef;
+	@ViewChild('lineCanvasLTC', {read: ElementRef}) lineCanvasLTC: ElementRef;
 	public lineChart: any;
 
   constructor(public navCtrl: NavController, public restProvider: RestProvider, public storage: Storage) {
-  	this.getETHPrice();
-    this.getCoinPriceHistory();
+  	this.getBtcEthLtcPrices();
+    
   }
 
   ngAfterViewInit(){
-    //console.log('canvas',this.lineCanvas);
+    
   }
 
   ionViewDidLoad(){
-  	this.btcChart();  
+  	this.btcChart(); 
+  	this.ltcChart();
+  	this.getBtcTxs();
+  	this.getLtcTxs();
   	
   }
 
   ionViewWillEnter(){
   
-  	this.getETHPrice();
   	this.storage.get('wallet').then((val) => {
   		if(val != null){
   			this.address = JSON.parse(val);
   			this.restProvider.getWallet(this.address).subscribe(wallet => {
 		  		this.wallet = wallet;
 		  		this.getImgUrls();
-
-		  		if(this.address != "") {
-		  			this.totalBalance = 0;
-		  			this.totalBalance += (this.ethPrice.price_usd * this.wallet.ETH.balance);
-			  		this.wallet.tokens.forEach(obj => {
-			  			this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
-			  			
-			  		})
-			  		
-			  	}
-		  		
+		  		//add total balance
 	  		});
   		}else{
   			this.address = "";
@@ -65,49 +62,51 @@ export class HomePage {
   }
 
   btcChart(){
-    this.restProvider.getCoinPrice('BTC').subscribe(res => {
+    this.restProvider.getCoinPriceHistory('BTC').subscribe(res => {
       //this.btcPriceData = data['Data'];
       let coinHistory = res['Data'].map((a) => (a.close));
       let coinTimes = res['Data'].map((a) => (a.time));
 
     //console.log(this.btcPriceLast7Days.values());
-    this.lineChart = new Chart(this.lineCanvas.nativeElement, {
-            type: 'line',
-            options: {
-              legend: {
-                  display: false
-                },
-              scales:
+    this.lineChart = new Chart(this.lineCanvasBTC.nativeElement, {
+        type: 'line',
+        options: {
+	        legend: {
+	            display: false,
+	        	},
+	        scales: {
+	            xAxes: [{
+	                 display: false
+	               }],
+	            yAxes: [{
+	                 display: false
+	               }]
+	            },
+        	},
+        data: {
+            labels: coinTimes,
+            datasets: [
                 {
-                    xAxes: [{
-                        display: false
-                    }]
-                }
-              },
-            data: {
-                labels: coinTimes,
-                datasets: [
-                    {
-                        label: "Today",
-                        fill: false,
-                        lineTension: 0.1,
-                        backgroundColor: "rgba(75,192,192,0.4)",
-                        borderColor: "rgba(75,192,192,1)",
-                        borderCapStyle: 'butt',
-                        borderDash: [],
-                        borderDashOffset: 0.0,
-                        borderJoinStyle: 'miter',
-                        pointBorderColor: "rgba(75,192,192,1)",
-                        pointBackgroundColor: "#fff",
-                        pointBorderWidth: 1,
-                        pointHoverRadius: 5,
-                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                        pointHoverBorderColor: "rgba(220,220,220,1)",
-                        pointHoverBorderWidth: 2,
-                        pointRadius: 1,
-                        pointHitRadius: 10,
-                        data: coinHistory,
-                        spanGaps: false,
+                    label: "Today",
+                    fill: true,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(255,153,0,0.4)",
+                    borderColor: "rgba(255,153,0,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(255,153,0,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(255,153,0,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: coinHistory,
+                    spanGaps: false,
                     }
                 ]
             }
@@ -117,35 +116,99 @@ export class HomePage {
     
   }
 
-  getETHPrice(){
-  	this.restProvider.getETHPrice().subscribe(price => {
-		  this.ethPrice = price;
+  ltcChart(){
+    this.restProvider.getCoinPriceHistory('LTC').subscribe(res => {
+      //this.btcPriceData = data['Data'];
+      let coinHistory = res['Data'].map((a) => (a.close));
+      let coinTimes = res['Data'].map((a) => (a.time));
+
+    //console.log(this.btcPriceLast7Days.values());
+    this.lineChart = new Chart(this.lineCanvasLTC.nativeElement, {
+        type: 'line',
+        options: {
+	        legend: {
+	            display: false,
+	        	},
+	        scales: {
+	            xAxes: [{
+	                 display: false
+	               }],
+	            yAxes: [{
+	                 display: false
+	               }]
+	            },
+        	},
+        data: {
+            labels: coinTimes,
+            datasets: [
+                {
+                    label: "Today",
+                    fill: true,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(192,192,192,.4)",
+                    borderColor: "rgba(192,192,192,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(192,192,192,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(192,192,192,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: coinHistory,
+                    spanGaps: false,
+                    }
+                ]
+            }
+ 
+        });
+    });
+    
+  }
+
+  getBtcEthLtcPrices(){
+  	this.restProvider.getCoinPrice('BTC').subscribe(btc => {
+		  this.btcPrice = btc['USD'];
+	  });
+  	this.restProvider.getCoinPrice('ETH').subscribe(eth => {
+		  this.ethPrice = eth['USD'];
+	  });
+  	this.restProvider.getCoinPrice('LTC').subscribe(ltc => {
+		  this.ltcPrice = ltc['USD'];
 	  });
   }
 
-  getCoinPriceHistory(){
-    this.restProvider.getCoinPrice('BTC').subscribe(data => {
-      this.btcPriceData = data['Data'];
-      this.btcPriceData.forEach(obj => {
-        //console.log(obj['close']);
-        this.btcPriceLast7Days.push(obj['close']);
-      })
-    });
-
-    //console.log('this one bruh', this.btcPriceLast7Days);
-  }
+ 
 
   getImgUrls(){
   	if(this.address != "") {
-  		this.restProvider.getCoinData().subscribe(coinData => {
+  		this.restProvider.getCoinImgs().subscribe(coinData => {
   			this.coinData = coinData;
-  			//console.log(this.coinData);
   			this.wallet.ETH.imgUrl = 'https://www.cryptocompare.com'+this.coinData['Data']['ETH']['ImageUrl'];
   			this.wallet.tokens.forEach(obj => {
   				obj.imgUrl = 'https://www.cryptocompare.com'+this.coinData['Data'][obj.tokenInfo.symbol]['ImageUrl'];
   			})
   		});
 	  }
+  }
+
+  getBtcTxs(){
+  	this.restProvider.getBTCtxs('18TExftLbtUe8ykFkyyeUEvV3W4cxy7Wch').subscribe(txs => {
+  		this.btcWallet = txs;
+  		console.log(this.btcWallet);
+  	});
+  }
+
+  getLtcTxs(){
+  	this.restProvider.getLTCtxs('LZA9vgkJkQj58YXpLsZpaULdGtPeayqT4G').subscribe(txs => {
+  		this.ltcWallet = txs;
+  		console.log(this.ltcWallet);
+  	});
   }
 
 }

@@ -15,6 +15,8 @@ export class RestProvider {
 	coincapUrl;
 	cyrptocompareUrl;
   coinPriceUrl;
+  blockcypherBTC;
+  blockcypherLTC;
 
 
   constructor(public http: HttpClient) {
@@ -22,6 +24,8 @@ export class RestProvider {
     this.coincapUrl ='http://coincap.io/page/ETH/';
     this.cyrptocompareUrl = 'https://min-api.cryptocompare.com/data/all/coinlist';
     this.coinPriceUrl = 'https://min-api.cryptocompare.com/data/';
+    this.blockcypherBTC= 'https://api.blockcypher.com/v1/btc/main/addrs/';
+    this.blockcypherLTC= 'https://api.blockcypher.com/v1/ltc/main/addrs/';
     
   }
 
@@ -30,19 +34,31 @@ export class RestProvider {
   		.map(res => (res));
   }
 
-  getETHPrice(){
-  	return this.http.get(this.coincapUrl)
-  		.map(price => (price));
-  }
-
-  getCoinData(){
+  getCoinImgs(){
   	return this.http.get(this.cyrptocompareUrl)
   		.map(coinlist => (coinlist));
   }
 
-  getCoinPrice(coinSymbol) {
+  getCoinPriceHistory(coinSymbol) {
     return this.http.get(this.coinPriceUrl+'histominute?fsym='+coinSymbol+'&tsym=USD&limit=1440&aggregate=5&e=GDAX')
       .map(priceData => (priceData));
+
+  }
+
+  getCoinPrice(coinSymbol) {
+    return this.http.get(this.coinPriceUrl+'price?fsym='+coinSymbol+'&tsyms=USD')
+      .map(priceData => (priceData));
+
+  }
+
+  getBTCtxs(addr){
+    return this.http.get(this.blockcypherBTC +addr)
+      .map(txs => (txs));
+  }
+
+  getLTCtxs(addr){
+    return this.http.get(this.blockcypherLTC +addr)
+      .map(txs => (txs));
   }
 
 }

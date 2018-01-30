@@ -5,57 +5,45 @@
 </ion-header>
 
 <ion-content no-padding>
-  <ion-card>
-      <ion-card-header>
-        Line Chart
-      </ion-card-header>
-      <ion-card-content>
-        <canvas #lineCanvas></canvas>
-      </ion-card-content>
-    </ion-card>
+  <ion-card *ngIf="btcWallet">
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="https://www.cryptocompare.com/media/19633/btc.png">
+      </ion-avatar>
+      <h2>
+        <strong>${{btcPrice * (btcWallet.balance * Math.pow(10, -8)) | number : '1.2-2'}}</strong>
+      </h2>
+      <p>{{btcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} BTC</p>
+      <ion-note item-end>
+        <small class="changed" style="color: red;">
+          -5.04%
+        </small><br>
+        1 BTC = ${{btcPrice}}
+      </ion-note>
+    </ion-item>
+    <canvas #lineCanvasBTC></canvas>
+  </ion-card>
+
+  <ion-card *ngIf="ltcWallet">
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="https://www.cryptocompare.com/media/19782/litecoin-logo.png">
+      </ion-avatar>
+      <h2>
+        <strong>${{ltcPrice * (ltcWallet.balance * Math.pow(10, -8)) | number : '1.2-2'}}</strong>
+      </h2>
+      <p>{{ltcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} LTC</p>
+      <ion-note item-end>
+        <small class="changed" style="color: green;">
+          8.13%
+        </small><br>
+        1 LTC = ${{ltcPrice}}
+      </ion-note>
+    </ion-item>
+    <canvas #lineCanvasLTC></canvas>
+  </ion-card>
+
   <ion-list *ngIf="wallet">
-
-
-
-    <ion-card >
-      <ion-card-content>
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="https://www.cryptocompare.com/media/19633/btc.png">
-          </ion-avatar>
-          <h2>
-            <strong>$400</strong>
-          </h2>
-          <p>0.012 BTC</p>
-          <ion-note item-end>
-            <small class="changed" style="color: red;">
-              -5.04%
-            </small><br>
-            1 BTC = $12000.00
-          </ion-note>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card >
-      <ion-card-content>
-        <ion-item>
-          <ion-avatar item-start>
-            <img src="https://www.cryptocompare.com/media/19782/litecoin-logo.png">
-          </ion-avatar>
-          <h2>
-            <strong>$351</strong>
-          </h2>
-          <p>2.3 LTC</p>
-          <ion-note item-end>
-            <small class="changed" style="color: green;">
-              2.85%
-            </small><br>
-            1 LTC = $184.63
-          </ion-note>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
 
     <ion-card text-center *ngIf="ethPrice" >
       <ion-card-header>
@@ -64,7 +52,7 @@
             <img src="{{wallet.ETH.imgUrl}}">
           </ion-avatar>
           <h2>
-            <strong>${{ethPrice.price * wallet.ETH.balance | number : '1.2-2'}}</strong>
+            <strong>${{ethPrice * wallet.ETH.balance | number : '1.2-2'}}</strong>
           </h2>
           <p>{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
           <ion-note item-end>
@@ -74,7 +62,7 @@
             <small class="changed" *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
               {{ethPrice.cap24hrChange}}%
             </small><br>
-            1 ETH = ${{ethPrice.price}}
+            1 ETH = ${{ethPrice}}
           </ion-note>
         </ion-item>
       </ion-card-header>
