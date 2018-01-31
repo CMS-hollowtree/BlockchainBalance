@@ -25,6 +25,7 @@ export class HomePage {
 
 	@ViewChild('lineCanvasBTC', {read: ElementRef}) lineCanvasBTC: ElementRef;
 	@ViewChild('lineCanvasLTC', {read: ElementRef}) lineCanvasLTC: ElementRef;
+	@ViewChild('lineCanvasETH', {read: ElementRef}) lineCanvasETH: ElementRef;
 	public lineChart: any;
 
   constructor(public navCtrl: NavController, public restProvider: RestProvider, public storage: Storage) {
@@ -33,18 +34,20 @@ export class HomePage {
   }
 
   ngAfterViewInit(){
-    
+  	
   }
 
   ionViewDidLoad(){
+  	this.ethChart();
   	this.btcChart(); 
   	this.ltcChart();
-  	this.getBtcTxs();
-  	this.getLtcTxs();
+  	
   	
   }
 
   ionViewWillEnter(){
+  	this.getBtcTxs();
+  	this.getLtcTxs();
   
   	this.storage.get('wallet').then((val) => {
   		if(val != null){
@@ -53,6 +56,7 @@ export class HomePage {
 		  		this.wallet = wallet;
 		  		this.getImgUrls();
 		  		//add total balance
+		  		this.getTotalBalance();
 	  		});
   		}else{
   			this.address = "";
@@ -101,6 +105,61 @@ export class HomePage {
                     pointBorderWidth: 1,
                     pointHoverRadius: 5,
                     pointHoverBackgroundColor: "rgba(255,153,0,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: coinHistory,
+                    spanGaps: false,
+                    }
+                ]
+            }
+ 
+        });
+    });
+    
+  }
+
+  ethChart(){
+    this.restProvider.getCoinPriceHistory('ETH').subscribe(res => {
+      //this.btcPriceData = data['Data'];
+      let coinHistory = res['Data'].map((a) => (a.close));
+      let coinTimes = res['Data'].map((a) => (a.time));
+
+    //console.log(this.btcPriceLast7Days.values());
+    this.lineChart = new Chart(this.lineCanvasETH.nativeElement, {
+        type: 'line',
+        options: {
+	        legend: {
+	            display: false,
+	        	},
+	        scales: {
+	            xAxes: [{
+	                 display: false
+	               }],
+	            yAxes: [{
+	                 display: false
+	               }]
+	            },
+        	},
+        data: {
+            labels: coinTimes,
+            datasets: [
+                {
+                    label: "Today",
+                    fill: true,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(110,110,110,0.4)",
+                    borderColor: "rgba(110,110,110,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(110,110,110,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(110,110,110,1)",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
@@ -207,7 +266,20 @@ export class HomePage {
   getLtcTxs(){
   	this.restProvider.getLTCtxs('LZA9vgkJkQj58YXpLsZpaULdGtPeayqT4G').subscribe(txs => {
   		this.ltcWallet = txs;
-  		console.log(this.ltcWallet);
+  	});
+  }
+
+  getTotalBalance(){
+  	this.totalBalance = 0;
+  	if(this.btcWallet){
+  		this.totalBalance += this.btcPrice * (this.btcWallet.balance * Math.pow(10, -8));
+  	}
+  	if(this.ltcWallet){
+  		this.totalBalance += this.ltcPrice * (this.ltcWallet.balance * Math.pow(10, -8));
+  	}
+  	
+  	this.wallet.tokens.forEach(obj => {
+  		this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
   	});
   }
 

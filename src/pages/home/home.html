@@ -3,72 +3,89 @@
     <ion-title text-center>${{totalBalance | number : '1.2-2'}}</ion-title>
   </ion-navbar>
 </ion-header>
-
 <ion-content no-padding>
-  <ion-card *ngIf="btcWallet">
+  <ion-card >
     <ion-item>
       <ion-avatar item-start>
         <img src="https://www.cryptocompare.com/media/19633/btc.png">
       </ion-avatar>
-      <h2>
+      <h2 *ngIf="btcWallet">
         <strong>${{btcPrice * (btcWallet.balance * Math.pow(10, -8)) | number : '1.2-2'}}</strong>
       </h2>
-      <p>{{btcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} BTC</p>
+      <p *ngIf="btcWallet">{{btcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} BTC</p>
       <ion-note item-end>
+        ${{btcPrice}}<br>
         <small class="changed" style="color: red;">
-          -5.04%
-        </small><br>
-        1 BTC = ${{btcPrice}}
+          -5.04% ($1,245.45)
+        </small>
       </ion-note>
     </ion-item>
-    <canvas #lineCanvasBTC></canvas>
+    <small class="pastDay">Past day</small>
+    <svg height="1" width="400">
+      <line x1="50" y1="0" x2="400" y2="0" style="stroke:#33055C;stroke-width:2" />
+    </svg>
+    <canvas :height="75" #lineCanvasBTC></canvas>
   </ion-card>
 
-  <ion-card *ngIf="ltcWallet">
-    <ion-item>
+  <ion-card>
+      <ion-item *ngIf="wallet" >
+        <ion-avatar item-start>
+          <img src="{{wallet.ETH.imgUrl}}">
+        </ion-avatar>
+        <h2>
+          <strong>${{ethPrice * wallet.ETH.balance | number : '1.2-2'}}</strong>
+        </h2>
+        <p>{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
+        <ion-note item-end>
+          ${{ethPrice}}<br>
+          <small class="changed" style="color: green;">
+            8.13% ($24.56)
+          </small>
+          <small class="changed" *ngIf="ethPrice.cap24hrChange > 0" style="color: green;">
+            {{ethPrice.cap24hrChange}}%
+          </small>
+          <small class="changed" *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
+            {{ethPrice.cap24hrChange}}%
+          </small>
+         
+        </ion-note>
+      </ion-item>
+      <small class="pastDay">Past day</small>
+      <svg height="1" width="400">
+        <line x1="50" y1="0" x2="400" y2="0" style="stroke:#33055C;stroke-width:2" />
+      </svg>
+      <canvas :height="75" #lineCanvasETH></canvas>
+    </ion-card>
+
+  <ion-card >
+    <ion-item >
       <ion-avatar item-start>
         <img src="https://www.cryptocompare.com/media/19782/litecoin-logo.png">
       </ion-avatar>
-      <h2>
+      <h2 *ngIf="ltcWallet">
         <strong>${{ltcPrice * (ltcWallet.balance * Math.pow(10, -8)) | number : '1.2-2'}}</strong>
       </h2>
-      <p>{{ltcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} LTC</p>
+      <p *ngIf="ltcWallet">{{ltcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} LTC</p>
       <ion-note item-end>
+        ${{ltcPrice}}<br>
         <small class="changed" style="color: green;">
-          8.13%
-        </small><br>
-        1 LTC = ${{ltcPrice}}
+          8.13% ($24.56)
+        </small>
       </ion-note>
     </ion-item>
-    <canvas #lineCanvasLTC></canvas>
+    <small class="pastDay">Past day</small>
+    <svg height="1" width="400">
+      <line x1="50" y1="0" x2="400" y2="0" style="stroke:#33055C;stroke-width:2" />
+    </svg>
+    <canvas :height="75" #lineCanvasLTC></canvas>
   </ion-card>
 
-  <ion-list *ngIf="wallet">
-
-    <ion-card text-center *ngIf="ethPrice" >
+    
+    <ion-card *ngIf="wallet">
       <ion-card-header>
-        <ion-item >
-          <ion-avatar item-start>
-            <img src="{{wallet.ETH.imgUrl}}">
-          </ion-avatar>
-          <h2>
-            <strong>${{ethPrice * wallet.ETH.balance | number : '1.2-2'}}</strong>
-          </h2>
-          <p>{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
-          <ion-note item-end>
-            <small class="changed" *ngIf="ethPrice.cap24hrChange > 0" style="color: green;">
-              {{ethPrice.cap24hrChange}}%
-            </small>
-            <small class="changed" *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
-              {{ethPrice.cap24hrChange}}%
-            </small><br>
-            1 ETH = ${{ethPrice}}
-          </ion-note>
-        </ion-item>
+          Tokens
       </ion-card-header>
-      <small text-center>tokens</small>
-      <ion-card-content>
-        <ion-list>
+      <ion-list>
         <ion-item *ngFor="let t of wallet.tokens">
           <ion-avatar item-start>
             <img src="{{t.imgUrl}}"> 
@@ -84,13 +101,10 @@
             <small class="changed" *ngIf="t.tokenInfo.price.diff < 0" style="color: red;">
               {{t.tokenInfo.price.diff | number : '0.2-2'}}%
             </small><br>
-            1 {{t.tokenInfo.symbol}} = ${{t.tokenInfo.price.rate | number : '0.2-2'}}
+            ${{t.tokenInfo.price.rate | number : '0.2-2'}}
           </ion-note>
         </ion-item>
-        </ion-list>
-        
-      </ion-card-content>
+      </ion-list>
     </ion-card>      
   
-  </ion-list>
 </ion-content>

@@ -40,7 +40,7 @@ export class RestProvider {
   }
 
   getCoinPriceHistory(coinSymbol) {
-    return this.http.get(this.coinPriceUrl+'histominute?fsym='+coinSymbol+'&tsym=USD&limit=1440&aggregate=5&e=GDAX')
+    return this.http.get(this.coinPriceUrl+'histominute?fsym='+coinSymbol+'&tsym=USD&limit=1440&aggregate=15&e=GDAX')
       .map(priceData => (priceData));
 
   }

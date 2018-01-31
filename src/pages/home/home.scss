@@ -1,17 +1,26 @@
 page-home {
 	ion-note {
 	    font-size: 14px;
-	    //align-self: flex-start;
+	    align-self: flex-start;
 	    position: relative;
+	    bottom: -10px;
+	    text-align: right;
 	}
 
-	.changed {
-		position: absolute;
-		left: 100%;
-		//top: 25%;
+	.a {
+		position: relative;
+		margin-left: -50px;
+		bottom: -37px;
 		font-weight: bold;
-		margin-left: -25px;
 		font-size: 10px;
+	}
+
+	.pastDay{
+		color: #33055C;
+		font-weight: lighter;
+		position: relative;
+		margin-left: 5px;
+		top: 20px;
 	}
 
 }
