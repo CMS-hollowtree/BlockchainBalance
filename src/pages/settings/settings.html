@@ -11,23 +11,43 @@
     <ion-row>
       <ion-col>
         <ion-list>
-        <ion-list-header>
-          Public addresses
-        </ion-list-header>    
-          <form (ngSubmit)="saveForm()">
-              <ion-card>
-                  
-                <ion-card-header>
-                  Ethereum
-                  <button ion-fab mini color="light" (click)="scan()"><ion-icon name="qr-scanner"></ion-icon></button>
-                </ion-card-header>
-                <ion-card-content>
-                  <ion-input [(ngModel)]="wallet" name="wallet" type="text"></ion-input>
-                  <button ion-button type="submit" block>Save Changes</button>
-                </ion-card-content>
-              </ion-card>
+          <ion-list-header>
+            Public addresses
+            <button ion-button color="secondary" (click)="save()" item-end>Save</button>
+          </ion-list-header>
+          <form (ngSubmit)="saveBTC()">
+            <ion-card>     
+              <ion-item>
+                <button ion-fab mini color="light" (click)="scanBTC()" item-start><ion-icon name="qr-scanner"></ion-icon></button>
+                Bitcoin
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="btcWallet" name="btcWallet" type="text" text-wrap></ion-input>
+              </ion-item>
               
-            
+            </ion-card>
+          </form>
+          <form (ngSubmit)="saveLTC()">
+            <ion-card>
+              <ion-item>
+                <button ion-fab mini color="light" (click)="scanLTC()" item-start><ion-icon name="qr-scanner"></ion-icon></button>
+                Litecoin
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="ltcWallet" name="ltcWallet" type="text"></ion-input>
+              </ion-item>
+            </ion-card>
+          </form> 
+          <form (ngSubmit)="saveETH()">
+            <ion-card>
+              <ion-item>
+                <button ion-fab mini color="light" (click)="scanETH()" item-start><ion-icon name="qr-scanner"></ion-icon></button>
+                Ethereum
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="wallet" name="wallet" type="text"></ion-input>
+              </ion-item>
+            </ion-card>
           </form>
         </ion-list>
       </ion-col>

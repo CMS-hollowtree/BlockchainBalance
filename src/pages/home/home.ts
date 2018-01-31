@@ -18,10 +18,12 @@ export class HomePage {
 	btcPrice:any;
 	ltcPrice:any;
 	Math:Math = Math;
-	address:string;
+	btcAddress:string;
+  ethAddress:string;
+  ltcAddress:string;
 	coinData:any;
-  	btcPriceData:any;
-  	btcPriceLast7Days:any = [];
+  btcPriceData:any;
+  btcPriceLast7Days:any = [];
 
 	@ViewChild('lineCanvasBTC', {read: ElementRef}) lineCanvasBTC: ElementRef;
 	@ViewChild('lineCanvasLTC', {read: ElementRef}) lineCanvasLTC: ElementRef;
@@ -34,44 +36,67 @@ export class HomePage {
   }
 
   ngAfterViewInit(){
-  	
+
   }
 
   ionViewDidLoad(){
   	this.ethChart();
   	this.btcChart(); 
   	this.ltcChart();
-  	
-  	
   }
 
   ionViewWillEnter(){
-  	this.getBtcTxs();
-  	this.getLtcTxs();
+    this.totalBalance = 0;
   
   	this.storage.get('wallet').then((val) => {
   		if(val != null){
-  			this.address = JSON.parse(val);
-  			this.restProvider.getWallet(this.address).subscribe(wallet => {
+  			this.ethAddress = JSON.parse(val);
+  			this.restProvider.getWallet(this.ethAddress).subscribe(wallet => {
 		  		this.wallet = wallet;
 		  		this.getImgUrls();
 		  		//add total balance
-		  		this.getTotalBalance();
+          this.totalBalance += (this.wallet.ETH.balance * this.ethPrice);
+		  		this.wallet.tokens.forEach(obj => {
+            this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
+          });
+
 	  		});
   		}else{
-  			this.address = "";
+  			//this.ethAddress = "";
   		}
   	})
+    this.storage.get('btcWallet').then((val) => {
+      if(val != null){
+        this.btcAddress = JSON.parse(val);
+        this.restProvider.getBTCtxs(this.btcAddress).subscribe(txs => {
+          this.btcWallet = txs;
+          //add total balance
+          this.totalBalance += (this.btcPrice * (this.btcWallet.balance * Math.pow(10, -8)));
+        });
+      }else{
+        //
+      }
+    })
+    this.storage.get('ltcWallet').then((val) => {
+      if(val != null){
+        this.ltcAddress = JSON.parse(val);
+        this.restProvider.getLTCtxs(this.ltcAddress).subscribe(txs => {
+          this.ltcWallet = txs;
+          //add total balance
+          this.totalBalance += (this.ltcPrice * (this.ltcWallet.balance * Math.pow(10, -8)));
+        });
+      }else{
+        //
+      }
+    })
 
   }
 
   btcChart(){
     this.restProvider.getCoinPriceHistory('BTC').subscribe(res => {
-      //this.btcPriceData = data['Data'];
       let coinHistory = res['Data'].map((a) => (a.close));
       let coinTimes = res['Data'].map((a) => (a.time));
 
-    //console.log(this.btcPriceLast7Days.values());
     this.lineChart = new Chart(this.lineCanvasBTC.nativeElement, {
         type: 'line',
         options: {
@@ -122,11 +147,9 @@ export class HomePage {
 
   ethChart(){
     this.restProvider.getCoinPriceHistory('ETH').subscribe(res => {
-      //this.btcPriceData = data['Data'];
       let coinHistory = res['Data'].map((a) => (a.close));
       let coinTimes = res['Data'].map((a) => (a.time));
 
-    //console.log(this.btcPriceLast7Days.values());
     this.lineChart = new Chart(this.lineCanvasETH.nativeElement, {
         type: 'line',
         options: {
@@ -149,17 +172,17 @@ export class HomePage {
                     label: "Today",
                     fill: true,
                     lineTension: 0.1,
-                    backgroundColor: "rgba(110,110,110,0.4)",
-                    borderColor: "rgba(110,110,110,1)",
+                    backgroundColor: "rgba(4,4,4,0.4)",
+                    borderColor: "rgba(4,4,4,1)",
                     borderCapStyle: 'butt',
                     borderDash: [],
                     borderDashOffset: 0.0,
                     borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(110,110,110,1)",
+                    pointBorderColor: "rgba(4,4,4,1)",
                     pointBackgroundColor: "#fff",
                     pointBorderWidth: 1,
                     pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(110,110,110,1)",
+                    pointHoverBackgroundColor: "rgba(4,4,4,1)",
                     pointHoverBorderColor: "rgba(220,220,220,1)",
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
@@ -177,11 +200,9 @@ export class HomePage {
 
   ltcChart(){
     this.restProvider.getCoinPriceHistory('LTC').subscribe(res => {
-      //this.btcPriceData = data['Data'];
       let coinHistory = res['Data'].map((a) => (a.close));
       let coinTimes = res['Data'].map((a) => (a.time));
 
-    //console.log(this.btcPriceLast7Days.values());
     this.lineChart = new Chart(this.lineCanvasLTC.nativeElement, {
         type: 'line',
         options: {
@@ -245,7 +266,7 @@ export class HomePage {
  
 
   getImgUrls(){
-  	if(this.address != "") {
+  	if(this.ethAddress != null) {
   		this.restProvider.getCoinImgs().subscribe(coinData => {
   			this.coinData = coinData;
   			this.wallet.ETH.imgUrl = 'https://www.cryptocompare.com'+this.coinData['Data']['ETH']['ImageUrl'];
@@ -256,31 +277,6 @@ export class HomePage {
 	  }
   }
 
-  getBtcTxs(){
-  	this.restProvider.getBTCtxs('18TExftLbtUe8ykFkyyeUEvV3W4cxy7Wch').subscribe(txs => {
-  		this.btcWallet = txs;
-  		console.log(this.btcWallet);
-  	});
-  }
-
-  getLtcTxs(){
-  	this.restProvider.getLTCtxs('LZA9vgkJkQj58YXpLsZpaULdGtPeayqT4G').subscribe(txs => {
-  		this.ltcWallet = txs;
-  	});
-  }
-
-  getTotalBalance(){
-  	this.totalBalance = 0;
-  	if(this.btcWallet){
-  		this.totalBalance += this.btcPrice * (this.btcWallet.balance * Math.pow(10, -8));
-  	}
-  	if(this.ltcWallet){
-  		this.totalBalance += this.ltcPrice * (this.ltcWallet.balance * Math.pow(10, -8));
-  	}
-  	
-  	this.wallet.tokens.forEach(obj => {
-  		this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
-  	});
-  }
+ 
 
 }

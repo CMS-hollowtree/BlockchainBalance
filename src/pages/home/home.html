@@ -7,7 +7,7 @@
   <ion-card >
     <ion-item>
       <ion-avatar item-start>
-        <img src="https://www.cryptocompare.com/media/19633/btc.png">
+        <img src="../assets/imgs/btc.png">
       </ion-avatar>
       <h2 *ngIf="btcWallet">
         <strong>${{btcPrice * (btcWallet.balance * Math.pow(10, -8)) | number : '1.2-2'}}</strong>
@@ -28,14 +28,14 @@
   </ion-card>
 
   <ion-card>
-      <ion-item *ngIf="wallet" >
+      <ion-item *ngIf="ethPrice" >
         <ion-avatar item-start>
-          <img src="{{wallet.ETH.imgUrl}}">
+          <img src="../assets/imgs/eth.png">
         </ion-avatar>
-        <h2>
+        <h2 *ngIf="wallet" >
           <strong>${{ethPrice * wallet.ETH.balance | number : '1.2-2'}}</strong>
         </h2>
-        <p>{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
+        <p *ngIf="wallet" >{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
         <ion-note item-end>
           ${{ethPrice}}<br>
           <small class="changed" style="color: green;">
@@ -95,13 +95,13 @@
           </h2>
           <p>{{t.balance * Math.pow(10, -t.tokenInfo.decimals) | number : '0.2-2'}} {{t.tokenInfo.symbol}}</p>
           <ion-note item-end>
-          <small class="changed" *ngIf="t.tokenInfo.price.diff > 0" style="color: green;">
+            ${{t.tokenInfo.price.rate | number : '0.2-2'}}<br>
+            <small class="changed" *ngIf="t.tokenInfo.price.diff > 0" style="color: green;">
               {{t.tokenInfo.price.diff | number : '0.2-2'}}%
             </small>
             <small class="changed" *ngIf="t.tokenInfo.price.diff < 0" style="color: red;">
               {{t.tokenInfo.price.diff | number : '0.2-2'}}%
-            </small><br>
-            ${{t.tokenInfo.price.rate | number : '0.2-2'}}
+            </small>
           </ion-note>
         </ion-item>
       </ion-list>
