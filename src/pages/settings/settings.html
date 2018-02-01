@@ -12,44 +12,52 @@
       <ion-col>
         <ion-list>
           <ion-list-header>
-            Public addresses
-            <button ion-button color="secondary" (click)="save()" item-end>Save</button>
-            <button ion-button color="danger" (click)="clearStorage()" item-end>Reset</button>
+            ACCOUNTS
+            <button ion-button color="secondary" (click)="save()" item-end outline>Save</button>
+            <button ion-button color="danger" (click)="clearStorage()" item-end outline>Reset</button>
           </ion-list-header>
           <form (ngSubmit)="saveBTC()">
-            <ion-card>     
+            <ion-card style="background-color: #ff9900">
+              <ion-card-header text-center color="light">
+                BITCOIN
+              </ion-card-header>
               <ion-item>
+                <ion-toggle class="toggle" name="btcEnabled" [(ngModel)]="btcEnabled"></ion-toggle>
                 <button ion-fab mini color="light" (click)="scanBTC()" item-start><ion-icon name="qr-scanner"></ion-icon></button>
-                Bitcoin
               </ion-item>
               <ion-item>
-                <ion-input [(ngModel)]="btcWallet" name="btcWallet" type="text" text-wrap></ion-input>
+                <ion-input [(ngModel)]="btcWallet" name="btcWallet" type="text" placeholder="public address" text-wrap></ion-input>
               </ion-item>
-              
+            </ion-card>
+          </form>
+          <form (ngSubmit)="saveETH()">
+            <ion-card style="background-color: #040404">
+              <ion-card-header text-center color="light">
+                ETHEREUM
+              </ion-card-header>
+              <ion-item>
+                <ion-toggle checked="true" class="toggle" name="ethEnabled" [(ngModel)]="ethEnabled"></ion-toggle>
+                <button ion-fab mini color="light" (click)="scanETH()" item-start><ion-icon name="qr-scanner"></ion-icon></button>
+              </ion-item>
+              <ion-item>
+                <ion-input [(ngModel)]="wallet" name="wallet" type="text" placeholder="public address"></ion-input>
+              </ion-item>
             </ion-card>
           </form>
           <form (ngSubmit)="saveLTC()">
-            <ion-card>
+            <ion-card style="background-color: #c0c0c0;">
+              <ion-card-header text-center color="light">
+                LITECOIN
+              </ion-card-header>
               <ion-item>
+                <ion-toggle checked="true" class="toggle" name="ltcEnabled" [(ngModel)]="ltcEnabled"></ion-toggle>
                 <button ion-fab mini color="light" (click)="scanLTC()" item-start><ion-icon name="qr-scanner"></ion-icon></button>
-                Litecoin
               </ion-item>
               <ion-item>
-                <ion-input [(ngModel)]="ltcWallet" name="ltcWallet" type="text"></ion-input>
+                <ion-input [(ngModel)]="ltcWallet" name="ltcWallet" type="text" placeholder="public address"></ion-input>
               </ion-item>
             </ion-card>
           </form> 
-          <form (ngSubmit)="saveETH()">
-            <ion-card>
-              <ion-item>
-                <button ion-fab mini color="light" (click)="scanETH()" item-start><ion-icon name="qr-scanner"></ion-icon></button>
-                Ethereum
-              </ion-item>
-              <ion-item>
-                <ion-input [(ngModel)]="wallet" name="wallet" type="text"></ion-input>
-              </ion-item>
-            </ion-card>
-          </form>
         </ion-list>
       </ion-col>
     </ion-row>

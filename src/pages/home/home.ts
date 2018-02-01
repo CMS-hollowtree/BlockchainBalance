@@ -13,6 +13,9 @@ export class HomePage {
 	wallet:any;
 	btcWallet:any;
 	ltcWallet:any;
+  btcEnabled:boolean;
+  ethEnabled:boolean;
+  ltcEnabled:boolean;
 	totalBalance:number;
 	ethPrice:any;
 	btcPrice:any;
@@ -36,7 +39,7 @@ export class HomePage {
   }
 
   ngAfterViewInit(){
-    console.log(this.btcPrice);
+    
   }
 
   ionViewDidLoad(){
@@ -47,6 +50,28 @@ export class HomePage {
 
   ionViewWillEnter(){
     this.totalBalance = 0;
+
+    this.storage.get('btcEnabled').then((val) => {
+      if(val != null){
+        this.btcEnabled = JSON.parse(val);
+      }else{
+        //
+      }
+    })
+    this.storage.get('ethEnabled').then((val) => {
+      if(val != null){
+        this.ethEnabled = JSON.parse(val);
+      }else{
+        //
+      }
+    })
+    this.storage.get('ltcEnabled').then((val) => {
+      if(val != null){
+        this.ltcEnabled = JSON.parse(val);
+      }else{
+        //
+      }
+    })
   
   	this.storage.get('wallet').then((val) => {
   		if(val != null){

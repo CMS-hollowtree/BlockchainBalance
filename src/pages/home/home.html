@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content no-padding>
-  <ion-card >
+  <ion-card [class.hide]="!btcEnabled">
     <ion-item>
       <ion-avatar item-start>
         <img src="../assets/imgs/btc.png">
@@ -27,7 +27,7 @@
     <canvas :height="75" #lineCanvasBTC></canvas>
   </ion-card>
 
-  <ion-card>
+  <ion-card [class.hide]="!ethEnabled">
       <ion-item *ngIf="ethPrice" >
         <ion-avatar item-start>
           <img src="../assets/imgs/eth.png">
@@ -57,7 +57,7 @@
       <canvas :height="75" #lineCanvasETH></canvas>
     </ion-card>
 
-  <ion-card >
+  <ion-card [class.hide]="!ltcEnabled">
     <ion-item >
       <ion-avatar item-start>
         <img src="https://www.cryptocompare.com/media/19782/litecoin-logo.png">
@@ -81,7 +81,7 @@
   </ion-card>
 
     
-    <ion-card *ngIf="wallet">
+    <ion-card *ngIf="wallet" [class.hide]="!ethEnabled">
       <ion-card-header>
           Tokens
       </ion-card-header>
