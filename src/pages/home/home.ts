@@ -36,7 +36,7 @@ export class HomePage {
   }
 
   ngAfterViewInit(){
-
+    console.log(this.btcPrice);
   }
 
   ionViewDidLoad(){

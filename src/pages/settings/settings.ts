@@ -55,6 +55,10 @@ export class SettingsPage {
     this.saveLTC();
   }
 
+  clearStorage(){
+    this.storage.clear();
+  }
+
   saveBTC(){
   	let btcWallet = this.btcWallet;
   	this.storage.set('btcWallet', JSON.stringify(btcWallet));

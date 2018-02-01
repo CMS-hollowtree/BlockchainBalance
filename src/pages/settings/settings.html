@@ -14,6 +14,7 @@
           <ion-list-header>
             Public addresses
             <button ion-button color="secondary" (click)="save()" item-end>Save</button>
+            <button ion-button color="danger" (click)="clearStorage()" item-end>Reset</button>
           </ion-list-header>
           <form (ngSubmit)="saveBTC()">
             <ion-card>     
