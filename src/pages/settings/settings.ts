@@ -9,7 +9,7 @@ import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-sca
   templateUrl: 'settings.html'
 })
 export class SettingsPage {
-  tabs:Tabs;
+  tab:Tabs;
 	wallet:any;
   btcWallet:any;
   ltcWallet:any;
