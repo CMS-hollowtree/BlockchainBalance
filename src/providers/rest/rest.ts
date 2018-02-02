@@ -21,7 +21,7 @@ export class RestProvider {
 
   constructor(public http: HttpClient) {
     this.url = 'https://api.ethplorer.io/';
-    this.coincapUrl ='http://coincap.io/page/ETH/';
+    this.coincapUrl ='http://coincap.io/page/';
     this.cyrptocompareUrl = 'https://min-api.cryptocompare.com/data/all/coinlist';
     this.coinPriceUrl = 'https://min-api.cryptocompare.com/data/';
     this.blockcypherBTC= 'https://api.blockcypher.com/v1/btc/main/addrs/';
@@ -52,13 +52,18 @@ export class RestProvider {
   }
 
   getBTCtxs(addr){
-    return this.http.get(this.blockcypherBTC +addr)
+    return this.http.get(this.blockcypherBTC+addr)
       .map(txs => (txs));
   }
 
   getLTCtxs(addr){
-    return this.http.get(this.blockcypherLTC +addr)
+    return this.http.get(this.blockcypherLTC+addr)
       .map(txs => (txs));
+  }
+
+  get24Hchange(coinSymbol){
+    return this.http.get(this.coincapUrl+coinSymbol)
+      .map(change => (change));
   }
 
 }

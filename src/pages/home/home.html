@@ -4,6 +4,15 @@
   </ion-navbar>
 </ion-header>
 <ion-content no-padding>
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    
+    </ion-refresher-content>
+  </ion-refresher>
+  
   <ion-card [class.hide]="!btcEnabled">
     <ion-item>
       <ion-avatar item-start>
@@ -15,9 +24,12 @@
       <p *ngIf="btcWallet">{{btcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} BTC</p>
       <ion-note item-end>
         ${{btcPrice}}<br>
-        <small class="changed" style="color: red;">
-          -5.04% ($1,245.45)
-        </small>
+        <small class="changed" *ngIf="btc24 > 0" style="color: green;">
+            {{btc24}}% (${{btcPrice * (btc24 * Math.pow(10, -2)) | number : '0.2-2'}})
+          </small>
+          <small class="changed" *ngIf="btc24 < 0" style="color: red;">
+            {{btc24}}% (${{btcPrice * (btc24 * Math.pow(10, -2)) | number : '0.2-2'}})
+          </small>
       </ion-note>
     </ion-item>
     <small class="pastDay">Past day</small>
@@ -38,16 +50,12 @@
         <p *ngIf="wallet" >{{wallet.ETH.balance | number : '0.2-2'}} ETH</p>
         <ion-note item-end>
           ${{ethPrice}}<br>
-          <small class="changed" style="color: green;">
-            8.13% ($24.56)
+          <small class="changed" *ngIf="eth24 > 0" style="color: green;">
+            {{eth24}}% (${{ethPrice * (eth24 * Math.pow(10, -2)) | number : '0.2-2'}})
           </small>
-          <small class="changed" *ngIf="ethPrice.cap24hrChange > 0" style="color: green;">
-            {{ethPrice.cap24hrChange}}%
+          <small class="changed" *ngIf="eth24 < 0" style="color: red;">
+            {{eth24}}% (${{ethPrice * (eth24 * Math.pow(10, -2)) | number : '0.2-2'}})
           </small>
-          <small class="changed" *ngIf="ethPrice.cap24hrChange < 0" style="color: red;">
-            {{ethPrice.cap24hrChange}}%
-          </small>
-         
         </ion-note>
       </ion-item>
       <small class="pastDay">Past day</small>
@@ -68,9 +76,12 @@
       <p *ngIf="ltcWallet">{{ltcWallet.balance * Math.pow(10, -8) | number : '1.2-2'}} LTC</p>
       <ion-note item-end>
         ${{ltcPrice}}<br>
-        <small class="changed" style="color: green;">
-          8.13% ($24.56)
-        </small>
+        <small class="changed" *ngIf="ltc24 > 0" style="color: green;">
+            {{ltc24}}% (${{ltcPrice * (ltc24 * Math.pow(10, -2)) | number : '0.2-2'}})
+          </small>
+          <small class="changed" *ngIf="ltc24 < 0" style="color: red;">
+            {{ltc24}}% (${{ltcPrice * (ltc24 * Math.pow(10, -2)) | number : '0.2-2'}})
+          </small>
       </ion-note>
     </ion-item>
     <small class="pastDay">Past day</small>

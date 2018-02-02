@@ -13,6 +13,9 @@ export class HomePage {
 	wallet:any;
 	btcWallet:any;
 	ltcWallet:any;
+  btc24:number;
+  ltc24:number;
+  eth24:number;
   btcEnabled:boolean;
   ethEnabled:boolean;
   ltcEnabled:boolean;
@@ -35,7 +38,7 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public restProvider: RestProvider, public storage: Storage) {
   	this.getBtcEthLtcPrices();
-    
+    this.get24HChange();
   }
 
   ngAfterViewInit(){
@@ -80,10 +83,12 @@ export class HomePage {
 		  		this.wallet = wallet;
 		  		this.getImgUrls();
 		  		//add total balance
-          this.totalBalance += (this.wallet.ETH.balance * this.ethPrice);
-		  		this.wallet.tokens.forEach(obj => {
-            this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
-          });
+          if(this.ethEnabled == true){
+            this.totalBalance += (this.wallet.ETH.balance * this.ethPrice);
+            this.wallet.tokens.forEach(obj => {
+              this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
+            });
+          }
 
 	  		});
   		}else{
@@ -96,7 +101,9 @@ export class HomePage {
         this.restProvider.getBTCtxs(this.btcAddress).subscribe(txs => {
           this.btcWallet = txs;
           //add total balance
-          this.totalBalance += (this.btcPrice * (this.btcWallet.balance * Math.pow(10, -8)));
+          if(this.btcEnabled == true){
+            this.totalBalance += (this.btcPrice * (this.btcWallet.balance * Math.pow(10, -8)));
+          }
         });
       }else{
         //
@@ -108,13 +115,22 @@ export class HomePage {
         this.restProvider.getLTCtxs(this.ltcAddress).subscribe(txs => {
           this.ltcWallet = txs;
           //add total balance
-          this.totalBalance += (this.ltcPrice * (this.ltcWallet.balance * Math.pow(10, -8)));
+          if(this.ltcEnabled){
+            this.totalBalance += (this.ltcPrice * (this.ltcWallet.balance * Math.pow(10, -8)));
+          }
         });
       }else{
         //
       }
     })
 
+  }
+
+  doRefresh(refresher) {
+    this.ionViewWillEnter();
+    setTimeout(() => {
+      refresher.complete();
+    }, 2000);
   }
 
   btcChart(){
@@ -125,6 +141,12 @@ export class HomePage {
     this.lineChart = new Chart(this.lineCanvasBTC.nativeElement, {
         type: 'line',
         options: {
+          tooltips: {
+            enabled: false
+          },
+          hover: {
+            mode: null
+          },
 	        legend: {
 	            display: false,
 	        	},
@@ -178,6 +200,12 @@ export class HomePage {
     this.lineChart = new Chart(this.lineCanvasETH.nativeElement, {
         type: 'line',
         options: {
+          tooltips: {
+            enabled: false
+          },
+          hover: {
+            mode: null
+          },
 	        legend: {
 	            display: false,
 	        	},
@@ -231,6 +259,12 @@ export class HomePage {
     this.lineChart = new Chart(this.lineCanvasLTC.nativeElement, {
         type: 'line',
         options: {
+          tooltips: {
+            enabled: false
+          },
+          hover: {
+            mode: null
+          },
 	        legend: {
 	            display: false,
 	        	},
@@ -288,7 +322,17 @@ export class HomePage {
 	  });
   }
 
- 
+ get24HChange(){
+   this.restProvider.get24Hchange('BTC').subscribe(btc => {
+     this.btc24 = btc['cap24hrChange'];
+   })
+   this.restProvider.get24Hchange('LTC').subscribe(ltc => {
+     this.ltc24 = ltc['cap24hrChange'];
+   })
+   this.restProvider.get24Hchange('ETH').subscribe(eth => {
+     this.eth24 = eth['cap24hrChange'];
+   })
+ }
 
   getImgUrls(){
   	if(this.ethAddress != null) {

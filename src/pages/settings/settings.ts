@@ -90,13 +90,16 @@ export class SettingsPage {
     this.saveBTC();
     this.saveETH();
     this.saveLTC();
-    //this.presentToast('Saved!');
-    this.tab.select(0);
+    //this.tab.select(0);
   }
 
   clearStorage(){
+    this.btcWallet = null;
+    this.ltcWallet = null;
+    this.wallet = null;
+
     this.storage.clear();
-    this.tab.select(0);
+    this.presentToast('Cleared');
   }
 
   saveBTC(){
