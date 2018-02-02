@@ -90,34 +90,44 @@ export class SettingsPage {
     this.saveBTC();
     this.saveETH();
     this.saveLTC();
-    //this.tab.select(0);
+    //
   }
 
   clearStorage(){
     this.btcWallet = null;
     this.ltcWallet = null;
     this.wallet = null;
+    this.btcEnabled = null;
+    this.ethEnabled = null;
+    this.ltcEnabled = null;
 
     this.storage.clear();
-    this.presentToast('Cleared');
+    //this.presentToast('Cleared');
+    this.tab.select(0);
   }
 
   saveBTC(){
   	let btcWallet = this.btcWallet;
     let btcEnabled = this.btcEnabled;
-  	this.storage.set('btcWallet', JSON.stringify(btcWallet));
+    if(btcWallet){
+      this.storage.set('btcWallet', JSON.stringify(btcWallet));
+    }
     this.storage.set('btcEnabled', JSON.stringify(btcEnabled));
   }
   saveETH(){
     let wallet = this.wallet;
     let ethEnabled = this.ethEnabled;
-    this.storage.set('wallet', JSON.stringify(wallet));
+    if(wallet){
+      this.storage.set('wallet', JSON.stringify(wallet));
+    }
     this.storage.set('ethEnabled', JSON.stringify(ethEnabled));
   }
   saveLTC(){
     let ltcWallet = this.ltcWallet;
     let ltcEnabled = this.ltcEnabled;
-    this.storage.set('ltcWallet', JSON.stringify(ltcWallet));
+    if(ltcWallet){
+      this.storage.set('ltcWallet', JSON.stringify(ltcWallet));
+    }
     this.storage.set('ltcEnabled', JSON.stringify(ltcEnabled));
   }
 
