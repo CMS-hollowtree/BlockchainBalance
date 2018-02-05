@@ -86,7 +86,10 @@ export class HomePage {
           if(this.ethEnabled == true){
             this.totalBalance += (this.wallet.ETH.balance * this.ethPrice);
             this.wallet.tokens.forEach(obj => {
-              this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
+              if(obj.tokenInfo.price !== false){
+                this.totalBalance += (obj.tokenInfo.price.rate * (obj.balance * Math.pow(10, -obj.tokenInfo.decimals)));
+              }
+              
             });
           }
 
@@ -340,12 +343,15 @@ export class HomePage {
   			this.coinData = coinData;
   			this.wallet.ETH.imgUrl = 'https://www.cryptocompare.com'+this.coinData['Data']['ETH']['ImageUrl'];
   			this.wallet.tokens.forEach(obj => {
-  				obj.imgUrl = 'https://www.cryptocompare.com'+this.coinData['Data'][obj.tokenInfo.symbol]['ImageUrl'];
+          if(this.coinData['Data'][obj.tokenInfo.symbol]){
+            obj.imgUrl = 'https://www.cryptocompare.com'+this.coinData['Data'][obj.tokenInfo.symbol]['ImageUrl'];  
+          }else{
+            obj.imgUrl = 'https://www.cryptocompare.com'+this.coinData['Data']['ETH']['ImageUrl'];
+          }
+
   			})
   		});
 	  }
   }
-
- 
 
 }

@@ -18,9 +18,6 @@ export class SettingsPage {
   ltcEnabled:boolean;
 	options:BarcodeScannerOptions;
 	scanData: {};
-  testBTCaddr:string = '18TExftLbtUe8ykFkyyeUEvV3W4cxy7Wch';
-  testLTCaddr:string = 'LZA9vgkJkQj58YXpLsZpaULdGtPeayqT4G';
-  testETHaddr:string = '0x52da0B25849f3ae61891dfC82c018A09e677B6Fe';
 
   constructor(public navCtrl: NavController, public storage: Storage, private barcode: BarcodeScanner, public toastCtrl: ToastController) {
     this.tab = this.navCtrl.parent;

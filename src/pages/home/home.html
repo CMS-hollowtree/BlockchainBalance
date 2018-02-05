@@ -96,18 +96,21 @@
           <ion-avatar item-start>
             <img src="{{t.imgUrl}}"> 
           </ion-avatar>
-          <h2>
+          <h2 *ngIf="t.tokenInfo.price.rate">
             <strong>${{t.tokenInfo.price.rate * (t.balance * Math.pow(10, -t.tokenInfo.decimals)) | number : '1.2-2'}}</strong>
           </h2>
           <p>{{t.balance * Math.pow(10, -t.tokenInfo.decimals) | number : '0.2-2'}} {{t.tokenInfo.symbol}}</p>
-          <ion-note item-end>
+          <ion-note item-end *ngIf="t.tokenInfo.price.rate">
             ${{t.tokenInfo.price.rate | number : '0.2-2'}}<br>
             <small class="changed" *ngIf="t.tokenInfo.price.diff > 0" style="color: green;">
-              {{t.tokenInfo.price.diff | number : '0.2-2'}}%
+              {{t.tokenInfo.price.diff | number : '0.2-2'}}% (${{t.tokenInfo.price.rate * (t.tokenInfo.price.diff * Math.pow(10, -2)) | number : '0.2-2'}})
             </small>
             <small class="changed" *ngIf="t.tokenInfo.price.diff < 0" style="color: red;">
-              {{t.tokenInfo.price.diff | number : '0.2-2'}}%
+              {{t.tokenInfo.price.diff | number : '0.2-2'}}% (${{t.tokenInfo.price.rate * (t.tokenInfo.price.diff * Math.pow(10, -2)) | number : '0.2-2'}})
             </small>
+          </ion-note>
+          <ion-note item-end *ngIf="!t.tokenInfo.price.rate">
+            $0.00
           </ion-note>
         </ion-item>
       </ion-list>
